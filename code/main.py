@@ -5,7 +5,7 @@ from threading import Thread
 import numpy as np
 
 from auxiliary.paths import results_path, data_path
-from model.final_predict import PredictForFileNoTry
+from bmdn.final_predict import PredictForFileNoTry
 
 correct_ext = True
 s = '-ext' if correct_ext else ''
