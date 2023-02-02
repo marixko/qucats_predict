@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy  as np
 import os
-from auxiliary.paths import input_data, raw_data
+from paths import input_data, raw_data
 from astropy.table import Table
-
+from columns import create_colors, calculate_colors
+from columns import wise, galex
 
 def match_stilts(filename):
     input_filename = os.path.join(raw_data,filename)
@@ -26,7 +27,8 @@ def match_stilts(filename):
 def process_data(filename):
     table = Table.read(os.path.join(input_data, filename))
     table = table.to_pandas()
-
+    table["ID"] = table["ID"].str.decode('utf-8') 
+    
     table['W1_MAG'] = 22.5 - 2.5*np.log10(table['FW1']) # + 2.699
     table['W2_MAG'] = 22.5 - 2.5*np.log10(table['FW2']) # + 3.339
 
@@ -38,4 +40,8 @@ def process_data(filename):
     table['W1_MAG'].replace([np.inf, -np.inf], np.nan, inplace=True)
     table['W2_MAG'].replace([np.inf, -np.inf], np.nan, inplace=True)
 
+    table[wise+galex] = table[wise+galex].fillna(value=99)
     corrected_df = correction(table)
+    calculate_colors(corrected_df, broad=True, narrow=True, wise=True, galex = True, aper="PStotal")
+    features = create_colors(broad=True, narrow=True, wise=True, galex=True, aper="PStotal")
+    return corrected_df[features]
