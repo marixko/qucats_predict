@@ -1,14 +1,15 @@
 import pandas as pd
 import sfdmap
 import extinction
-from .paths import data_path
+from paths import data_path
+import numpy as np
 
 def correction(data):
     chunk = data.copy(deep=True)
 
     Base_Filters   = ['u', 'J0378', 'J0395', 'J0410', 'J0430', 'g', 'J0515', 'r', 'J0660', 'i', 'J0861', 'z']
     Features_SPLUS = [filt+'_'+'PStotal' for filt in Base_Filters]
-    m = sfdmap.SFDMap(data_path+'/dustmaps/')
+    m = sfdmap.SFDMap('/Volumes/GoogleDrive/My Drive/Research/Projects/qucats_predict/data/dustmaps')
     EBV = m.ebv(chunk.RA, chunk.DEC)
 
     # Obtendo A_v nesta mesma posição
