@@ -1,9 +1,9 @@
 import pandas as pd
 import sfdmap
 import extinction
-from paths import data_path
+from auxiliary.paths import data_path
 import numpy as np
-from columns import splus, wise, galex
+from auxiliary.columns import splus, wise, galex
 def correction(data):
     chunk = data.copy(deep=True)
 

@@ -1,22 +1,22 @@
 import pandas as pd
 import numpy  as np
 import os
-from paths import input_data, raw_data
+from paths import input_path, raw_path
 from astropy.table import Table
 from columns import create_colors, calculate_colors
 from columns import wise, galex
 
 def match_stilts(filename):
-    input_filename = os.path.join(raw_data,filename)
+    input_filename = os.path.join(raw_path,filename)
     input_filename = input_filename.replace(" ", "\ ")
 
-    galex_filename = os.path.join(input_data, "temp_"+filename)
+    galex_filename = os.path.join(input_path, "temp_"+filename)
     galex_filename = galex_filename.replace(" ", "\ ")
 
     os.system(f"""java -jar stilts.jar cdsskymatch in={input_filename} cdstable=II/335/galex_ais ra=RA dec=DEC radius=2 find=each blocksize=100000 \\
                 ocmd='addcol ID_GALEX "objid"; addcol sep_GALEX "angDist"; delcols "objid angDist"' out={galex_filename}""")
 
-    output_filename = os.path.join(input_data,filename)
+    output_filename = os.path.join(input_path,filename)
     output_filename = output_filename.replace(" ", "\ ")
     os.system(f"""java -jar stilts.jar cdsskymatch in={galex_filename} cdstable=II/363/unwise ra=RA dec=DEC radius=2 find=each blocksize=100000 \\
                 ocmd='addcol ID_unWISE "objID"; addcol sep_unWISE "angDist"; delcols "objID angDist"' out={output_filename}""")
@@ -25,7 +25,7 @@ def match_stilts(filename):
     return
 
 def process_data(filename):
-    table = Table.read(os.path.join(input_data, filename))
+    table = Table.read(os.path.join(input_path, filename))
     table = table.to_pandas()
     table["ID"] = table["ID"].str.decode('utf-8') 
     
