@@ -1,14 +1,16 @@
+import os
 import pandas as pd
 import sfdmap
 import extinction
 from auxiliary.paths import data_path
 import numpy as np
 from auxiliary.columns import splus, wise, galex
+
 def correction(data):
     chunk = data.copy(deep=True)
 
     feat = galex+splus+wise
-    m = sfdmap.SFDMap('/Volumes/GoogleDrive/My Drive/Research/Projects/qucats_predict/data/dustmaps')
+    m = sfdmap.SFDMap(os.path.join(data_path, 'dustmaps'))
     EBV = m.ebv(chunk.RA, chunk.DEC)
 
     # Obtendo A_v nesta mesma posição

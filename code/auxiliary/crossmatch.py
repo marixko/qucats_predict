@@ -1,31 +1,37 @@
 import pandas as pd
 import numpy  as np
 import os
-from paths import input_path, raw_path
+from auxiliary.paths import input_path, raw_path
 from astropy.table import Table
-from columns import create_colors, calculate_colors
-from columns import wise, galex
+from auxiliary.columns import create_colors, calculate_colors
+from auxiliary.columns import wise, galex, splus, error_splus
+from auxiliary.correct_extinction import correction
 
 def match_stilts(filename):
-    input_filename = os.path.join(raw_path,filename)
-    input_filename = input_filename.replace(" ", "\ ")
+    input_filename = filename
+    file = filename.split(os.path.sep)[-1]
+    # input_filename = os.path.join(raw_path,filename)
+    # input_filename = input_filename.replace(" ", "\ ")
 
-    galex_filename = os.path.join(input_path, "temp_"+filename)
-    galex_filename = galex_filename.replace(" ", "\ ")
+    galex_filename = os.path.join(input_path, file.split('.')[0]+"_temp.fits")
+    # galex_filename = filename.split('.')[0]+"_temp.fits"
+    # galex_filename = galex_filename.replace(" ", "\ ")
 
     os.system(f"""java -jar stilts.jar cdsskymatch in={input_filename} cdstable=II/335/galex_ais ra=RA dec=DEC radius=2 find=each blocksize=100000 \\
                 ocmd='addcol ID_GALEX "objid"; addcol sep_GALEX "angDist"; delcols "objid angDist"' out={galex_filename}""")
 
-    output_filename = os.path.join(input_path,filename)
-    output_filename = output_filename.replace(" ", "\ ")
+    output_filename = os.path.join(input_path,file)
+
+    # output_filename = output_filename.replace(" ", "\ ")
     os.system(f"""java -jar stilts.jar cdsskymatch in={galex_filename} cdstable=II/363/unwise ra=RA dec=DEC radius=2 find=each blocksize=100000 \\
                 ocmd='addcol ID_unWISE "objID"; addcol sep_unWISE "angDist"; delcols "objID angDist"' out={output_filename}""")
     os.system(f"""rm {galex_filename}""")
 
     return
 
-def process_data(filename):
-    table = Table.read(os.path.join(input_path, filename))
+def process_data(filename, correct_ext=True, save=False):
+    pos_splus = ["ID", "RA", "DEC"]
+    table = Table.read(filename)
     table = table.to_pandas()
     table["ID"] = table["ID"].str.decode('utf-8') 
     
@@ -41,7 +47,19 @@ def process_data(filename):
     table['W2_MAG'].replace([np.inf, -np.inf], np.nan, inplace=True)
 
     table[wise+galex] = table[wise+galex].fillna(value=99)
-    corrected_df = correction(table)
-    calculate_colors(corrected_df, broad=True, narrow=True, wise=True, galex = True, aper="PStotal")
+    table.dropna(subset=splus, inplace=True)
+    # table[wise] = table[wise].replace(-1, val_mb)
+
+    if correct_ext:
+        table = correction(table)
+        save_filename = filename.split(os.path.sep)[-1].split('_')[0]+"_QSOs_VAC_ext.csv"
+    else:
+        save_filename = filename.split(os.path.sep)[-1].split('_')[0]+"_QSOs_VAC.csv"
+
+    table = calculate_colors(table, broad=True, narrow=True, wise=True, galex = True, aper="PStotal")
     features = create_colors(broad=True, narrow=True, wise=True, galex=True, aper="PStotal")
-    return corrected_df[features]
+    
+    if save:
+        table[pos_splus+features+splus+wise+galex+error_splus].to_csv(os.path.join(input_path, save_filename), index=False)
+
+    return table[features]

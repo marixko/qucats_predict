@@ -4,19 +4,30 @@ import pickle
 import pandas as pd
 import numpy as np
 from joblib import load
-from auxiliary.paths import results_path,  input_path, model_path
+from auxiliary.paths import results_path,  input_path, model_path, raw_path
 from bmdn.bmdn_predict import FinalPredict, Process_Final
 from tensorflow.keras.models import load_model
 from auxiliary.correct_extinction import correction 
 from auxiliary.columns import create_colors
+from auxiliary.crossmatch import match_stilts, process_data
 
 if __name__ == "__main__":
     correct_ext = True
+    preprocess = False
+
     model = {}
     aper = "PStotal"
     features = create_colors(broad=True, narrow=True, wise=True, galex=True, aper=aper)
     rf_path = os.path.join(model_path, "rf")
 
+    if preprocess:
+        list_raw = glob.glob(os.path.join(raw_path, "*.fits"))
+        for file in list_raw:
+            match_stilts(file)
+        list_input = glob.glob(os.path.join(input_path, "*.fits"))
+        for file in list_input:
+            process_data(file, correct_ext = correct_ext, save=True)
+            
     if correct_ext:
         list_files = glob.glob(os.path.join(input_path, "*ext.csv"))
         bmdn_path = os.path.join(model_path, "bmdn", "ext")
@@ -32,7 +43,6 @@ if __name__ == "__main__":
         Scaler_2 = load(os.path.join(bmdn_path, 'Scaler_2_MinMax.joblib'))
         model["rf"] = pickle.load(open(os.path.join(rf_path, "RF_final.sav"), 'rb'))
 
-
     HeaderToSave = ['ID', 'RA', 'DEC', 'zphot', 'zphot_2.5p', 'zphot_16p', 'zphot_84p', 'zphot_97.5p',
                             'pdf_peaks', 'zphot_second_peak', 'pdf_width', 'odds']
     for i in range(7):
@@ -44,26 +54,22 @@ if __name__ == "__main__":
     Header = HeaderToSave
 
     for file in list_files:
-        chunk = pd.read_table(file, sep=",")
-        # print(chunk)
-        chunk = chunk.reset_index(drop=True)
-
-        if correct_ext:
-            chunk = correction(chunk)
+        table = pd.read_table(file, sep=",")
+        table = table.reset_index(drop=True)
         
-        PredictSample, PredictFeatures, PredictMask = Process_Final(chunk, aper)
-        print(features)
-        print(PredictFeatures)
+        chunk_bmdn = table.copy(deep=True)
+        PredictSample, PredictFeatures, PredictMask = Process_Final(chunk_bmdn, aper)
         PredictSample_Features = Scaler_2.transform(Scaler_1.transform(PredictSample[PredictFeatures]))
         PredictSample_Features[PredictMask] = 0
 
-        Result_DF = FinalPredict(model["bmdn"], chunk[features], PredictSample_Features)
+        Result_DF = FinalPredict(model["bmdn"], chunk_bmdn, PredictSample_Features)
 
-        # Saving results DataFrame
-        Result_DF[HeaderToSave].to_csv(os.path.join(results_path, f'{file}.csv'), mode='a', index=False)
+        #Saving results DataFrame
+        Result_DF[HeaderToSave].to_csv(os.path.join(results_path, 'teste_bmdn.csv'), mode='a', index=False)
 
-        z = model["rf"].predict(chunk[features])
-        z.to_csv(os.path.join(results_path, f'{file}'+'_rf.csv'), mode='a', index=False)
+        z = model["rf"].predict(table[features])
+        table["z_rf"] = z
+        table[["ID",  "RA",  "DEC", "z_rf"]].to_csv(os.path.join(results_path, 'teste_rf.csv'), mode='a', index=False)
 
 
     # PZ_Model = load_model(os.path.join(model, 'Fold0'), compile=False)

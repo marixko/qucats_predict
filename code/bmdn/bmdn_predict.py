@@ -9,8 +9,7 @@ from scipy import integrate
 import tensorflow_probability as tfp; tfd = tfp.distributions
 from auxiliary.paths import data_path
 from auxiliary.metrics import Odds, Q
-from auxiliary.columns import splus, wise, galex
-
+from auxiliary.columns import splus, wise, galex, create_colors, calculate_colors
 
 def PredictForFileNoTry(files_list:list, folders:dict, aper='PStotal'):
 
@@ -73,10 +72,10 @@ def PredictForFileNoTry(files_list:list, folders:dict, aper='PStotal'):
             Result_DF[HeaderToSave].to_csv(os.path.join(folders['output'], f'{file}.csv'), mode='a', index=False)
 
 
-def Process_Final(Dataframe, Aper:str):
-    
+def Process_Final(Dataframe, aper:str):
     Errors_SPLUS = ['e_'+item for item in splus]
     Magnitudes = galex + splus + wise  # It's important to keep this order
+    Training_Features = create_colors(broad=True, narrow=True, wise=True, galex=True, aper=aper)
     
     # Non detected/observed objects
     for feature in Magnitudes:
@@ -87,23 +86,24 @@ def Process_Final(Dataframe, Aper:str):
         Dataframe[feature].fillna(Dataframe[error], inplace=True)
     
     # Calculate features (colors)    
-    Reference_Mag  = 'r_'+Aper
-    Reference_Idx = Magnitudes.index(Reference_Mag)
-    MagnitudesToLeft = Magnitudes[:Reference_Idx]
-    MagnitudesToRight = Magnitudes[(Reference_Idx+1):]
+    # Reference_Mag  = 'r_'+Aper
+    # Reference_Idx = Magnitudes.index(Reference_Mag)
+    # MagnitudesToLeft = Magnitudes[:Reference_Idx]
+    # MagnitudesToRight = Magnitudes[(Reference_Idx+1):]
 
-    for feature in MagnitudesToLeft: # of Reference_Mag
-        Dataframe[feature+'-'+Reference_Mag] = Dataframe[feature] - Dataframe[Reference_Mag]
+    # for feature in MagnitudesToLeft: # of Reference_Mag
+    #     Dataframe[feature+'-'+Reference_Mag] = Dataframe[feature] - Dataframe[Reference_Mag]
 
-    for feature in MagnitudesToRight: # of Reference_Mag
-        Dataframe[Reference_Mag+'-'+feature] = Dataframe[Reference_Mag] - Dataframe[feature]
+    # for feature in MagnitudesToRight: # of Reference_Mag
+    #     Dataframe[Reference_Mag+'-'+feature] = Dataframe[Reference_Mag] - Dataframe[feature]
     
-    Training_Features = []
-    for s in Dataframe.columns.values:
-        if '-' in s:
-            if s.split('-')[0] in Magnitudes and s.split('-')[1] in Magnitudes:
-                Training_Features.append(s)
-    
+    # Training_Features = []
+    # for s in Dataframe.columns.values:
+    #     if '-' in s:
+    #         if s.split('-')[0] in Magnitudes and s.split('-')[1] in Magnitudes:
+    #             Training_Features.append(s)
+    Dataframe = calculate_colors(Dataframe, broad=True, narrow=True, wise=True, galex=True, aper=aper)
+
     # Mask
     Mask = Dataframe[Training_Features].isna().reset_index(drop=True)
 
