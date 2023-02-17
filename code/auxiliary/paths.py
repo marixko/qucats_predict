@@ -30,5 +30,8 @@ results_path = os.path.join(data_path, 'result')
 predict_path = os.path.join(codes_path, 'predict')
 
 # logs
-
 logs_path = os.path.join(parent_cwd, 'logs')
+
+# auxiliary
+aux_path = os.path.join(codes_path, 'auxiliary')
+
