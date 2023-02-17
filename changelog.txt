@@ -1,0 +1,16 @@
+17/02/23
+Flow should be:
+
+1) get_crossmatch.py
+2) preprocess.py
+3) get_predictions.py
+4) merge_catalogs.py
+
+
+16/02/23
+These models should have been trained with extinction-corrected data.
+We saw that we were not correcting WISE and GALEX (GALEX being the worst case...)
+
+- BMDN: yes
+- RF: yes
+- FLEX: yes
