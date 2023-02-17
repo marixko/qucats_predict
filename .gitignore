@@ -132,3 +132,9 @@ dmypy.json
 .sav
 .fits
 .rds
+
+# R
+.Rhistory
+.Rdata
+
+.DS_Store
