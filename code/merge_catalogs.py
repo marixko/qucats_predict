@@ -72,4 +72,4 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
 
 if __name__=="__main__":
     list_files = glob.glob(os.path.join(results_path, "*ext_rf.csv"))
-    merge_catalogs(list_files, verbose=True, replace=True, remove=False)
+    merge_catalogs(list_files, verbose=True, replace=True, remove=True)
