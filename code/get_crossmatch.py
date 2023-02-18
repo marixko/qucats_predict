@@ -1,5 +1,5 @@
 import os
-import tqdm
+from tqdm import tqdm
 import glob
 import logging
 from auxiliary.paths import raw_path, logs_path
