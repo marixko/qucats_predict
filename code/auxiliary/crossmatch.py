@@ -1,6 +1,6 @@
 import os
 import logging
-from auxiliary.paths import input_path, logs_path,  aux_path
+from auxiliary.paths import logs_path,  aux_path, save_xmatch_path
 
 logging.basicConfig(filename=os.path.join(logs_path,'get_predictions.log'), format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.DEBUG, filemode='a')
@@ -11,11 +11,11 @@ def match_stilts(filename, replace=True):
     # input_filename = os.path.join(raw_path,filename)
     # input_filename = input_filename.replace(" ", "\ ")
 
-    galex_filename = os.path.join(input_path, file.split('.')[0]+"_temp.fits")
+    galex_filename = os.path.join(save_xmatch_path, file.split('.')[0]+"_temp.fits")
     # galex_filename = filename.split('.')[0]+"_temp.fits"
     # galex_filename = galex_filename.replace(" ", "\ ")
     
-    final_filename = os.path.join(input_path,file)
+    final_filename = os.path.join(save_xmatch_path,file)
     
     if os.path.exists(final_filename) and replace==False:
         logging.warning("Crossmatch file already exists. Passing.")
