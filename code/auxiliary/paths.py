@@ -28,13 +28,17 @@ logs_path = os.path.join(parent_cwd, 'logs')
 aux_path = os.path.join(codes_path, 'auxiliary')
 
 if maua_server:
-    raw_path = "/storage/splus/Catalogues/iDR4/VAC_features"
+    raw_path = "/storage/splus/Catalogues/iDR4/VAC_features/original"
     results_path = "/storage/splus/Catalogues/VACs/qso_z/iDR4"
+    save_xmatch_path = "/storage/splus/Catalogues/iDR4/VAC_features/corrected_qso_z"
+    save_corrected_path = save_xmatch_path
+
 else:
     # raw
     raw_path = os.path.join(data_path, 'raw')
     # results
     results_path = os.path.join(data_path, 'result')
-
+    save_xmatch_path = input_path
+    save_corrected_path = input_path
 
 

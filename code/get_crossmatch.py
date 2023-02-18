@@ -19,6 +19,6 @@ def get_crossmatch(list_raw, replace=False):
 
 if __name__ == "__main__":
     replace = True
-    list_raw = glob.glob(os.path.join(raw_path, "*.fits"))
+    list_raw = glob.glob(os.path.join(raw_path, "*features.fits"))
     
     get_crossmatch(list_raw, replace=replace)

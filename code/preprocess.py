@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import warnings
 from astropy.table import Table
-from auxiliary.paths import input_path, logs_path
+from auxiliary.paths import input_path, logs_path, save_corrected_path, save_xmatch_path
 from auxiliary.columns import create_colors, calculate_colors, wise, splus, galex, error_splus
 from auxiliary.correct_extinction import correction
 from astropy.utils.exceptions import AstropyWarning
@@ -63,7 +63,7 @@ def process_data(filename, correct_ext=True, save=False, replace=False):
     logging.info("Finished preprocessing dataset.")
 
     if save:
-        table[pos_splus+features+splus+wise+galex+error_splus].to_csv(os.path.join(input_path, save_filename), index=False)
+        table[pos_splus+features+splus+wise+galex+error_splus].to_csv(os.path.join(save_corrected_path, save_filename), index=False)
         logging.info("Saved file.")
     
     return table[features]
@@ -83,5 +83,5 @@ def get_data(list_input, correct_ext = True, save=True, replace= False):
 if __name__ == "__main__":
     replace = True
     correct_ext = True
-    list_input = glob.glob(os.path.join(input_path, "*.fits"))
+    list_input = glob.glob(os.path.join(save_xmatch_path, "*.fits"))
     get_data(list_input, correct_ext = correct_ext, save = True, replace = replace)
