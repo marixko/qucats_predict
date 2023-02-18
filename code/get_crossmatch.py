@@ -1,4 +1,5 @@
 import os
+import tqdm
 import glob
 import logging
 from auxiliary.paths import raw_path, logs_path
@@ -9,7 +10,7 @@ logging.basicConfig(filename=os.path.join(logs_path,'get_predictions.log'), form
 
 def get_crossmatch(list_raw, replace=False):
     logging.info("get_crossmatch was called for %s fields." % len(list_raw))
-    for file in list_raw:
+    for file in tqdm(list_raw):
         try:
             match_stilts(file, replace)
         except:
