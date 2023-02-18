@@ -14,15 +14,6 @@ if mycwd.split(os.sep)[-1] == "code":
     if parent_cwd.split(os.path.sep)[-1] == "qso_z":
         maua_server=True
 
-if maua_server:
-    raw_path = "/storage/splus/Catalogues/iDR4/VAC_features"
-    results_path = "/storage/splus/Catalogues/VACs/qso_z/iDR4"
-else:
-    # raw
-    raw_path = os.path.join(data_path, 'raw')
-    # results
-    results_path = os.path.join(data_path, 'result')
-
 # data
 data_path = os.path.join(parent_cwd, 'data')
 # input_model
@@ -35,4 +26,15 @@ predict_path = os.path.join(codes_path, 'predict')
 logs_path = os.path.join(parent_cwd, 'logs')
 # auxiliary
 aux_path = os.path.join(codes_path, 'auxiliary')
+
+if maua_server:
+    raw_path = "/storage/splus/Catalogues/iDR4/VAC_features"
+    results_path = "/storage/splus/Catalogues/VACs/qso_z/iDR4"
+else:
+    # raw
+    raw_path = os.path.join(data_path, 'raw')
+    # results
+    results_path = os.path.join(data_path, 'result')
+
+
 
