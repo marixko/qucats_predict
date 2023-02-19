@@ -2,6 +2,7 @@ import os
 os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import glob
+from tqdm import tqdm
 import pickle
 import logging
 import pandas as pd
@@ -69,7 +70,7 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
         pass
 
     if rf == True or bmdn == True: 
-        for file in list_files:
+        for file in tqdm(list_files):
             save_filename = file.split(os.path.sep)[-1].split('.')[0]
             logging.info("Starting for FIELD: %s" % save_filename)
             print("Starting for field: %s" % save_filename)
