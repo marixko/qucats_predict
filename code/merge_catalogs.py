@@ -71,5 +71,6 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
     return
 
 if __name__=="__main__":
+    logging.info("merge_catalogs.py was called.")
     list_files = glob.glob(os.path.join(results_path, "*ext_rf.csv"))
     merge_catalogs(list_files, verbose=True, replace=True, remove=True)

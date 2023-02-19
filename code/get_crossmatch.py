@@ -19,7 +19,7 @@ def get_crossmatch(list_raw, replace=False):
     return
 
 if __name__ == "__main__":
+    logging.info("get_crossmatch.py was called.")
     replace = True
     list_raw = glob.glob(os.path.join(raw_path, "*features.fits"))
-    
     get_crossmatch(list_raw, replace=replace)

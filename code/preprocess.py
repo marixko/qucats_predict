@@ -81,6 +81,7 @@ def get_data(list_input, correct_ext = True, save=True, replace= False):
 
 
 if __name__ == "__main__":
+    logging.info("preprocess.py was called.")
     replace = True
     correct_ext = True
     list_input = glob.glob(os.path.join(save_xmatch_path, "*.fits"))

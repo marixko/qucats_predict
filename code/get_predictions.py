@@ -142,11 +142,12 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
     return
     
 if __name__ == "__main__":
+    logging.info("get_predictions.py was called.")
     replace = False
     correct_ext_model = True
     bmdn= True
     rf =  False
     flex = False
-
+    
     list_files = glob.glob(os.path.join(input_path, "*ext.csv"))
     get_predictions(list_files, bmdn=bmdn, rf=rf, flex=flex, correct_ext_model = correct_ext_model, replace=replace)
