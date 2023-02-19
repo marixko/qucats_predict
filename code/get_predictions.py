@@ -1,14 +1,14 @@
 import os
 os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import glob
 import pickle
 import logging
-import warnings
 import pandas as pd
 from timeit import default_timer as timer
 from datetime import timedelta
 from joblib import load
-from auxiliary.paths import results_path,  input_path, model_path, predict_path, logs_path
+from auxiliary.paths import results_path, model_path, predict_path, logs_path, save_corrected_path
 from predict.bmdn import FinalPredict, Process_Final
 from tensorflow.keras.models import load_model
 from auxiliary.columns import create_colors
@@ -23,8 +23,8 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
     logging.info("Using model trained with extinction-corrected data: %s" % correct_ext_model)
 
     if verbose:
-        print("Starting predictions...")
-        print("Warning: existing files are being replaced by default for now! ")
+        print("Starting predictions for %s files" % len(list_files) )
+        print("Warning: if the result files already exists, they will be replaced by default for now! ")
         
     model = {}
     aper = "PStotal"
@@ -149,5 +149,5 @@ if __name__ == "__main__":
     rf =  False
     flex = False
     
-    list_files = glob.glob(os.path.join(input_path, "*ext.csv"))
+    list_files = glob.glob(os.path.join(save_corrected_path, "*ext.csv"))
     get_predictions(list_files, bmdn=bmdn, rf=rf, flex=flex, correct_ext_model = correct_ext_model, replace=replace)

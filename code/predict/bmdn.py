@@ -1,5 +1,6 @@
 import os
 os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from pandas import read_csv
 from tqdm import tqdm
 from gc import collect
