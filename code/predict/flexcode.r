@@ -71,9 +71,9 @@ if (save==TRUE) {
 #######
 
 if (correct_ext == TRUE) {
-  file_list <- Sys.glob(file.path(py$input_path,"*ext.csv"))
+  file_list <- Sys.glob(file.path(py$save_corrected_path,"*ext.csv"))
 } else {
-  file_list <- Sys.glob(file.path(py$input_path, "*VAC.csv"))
+  file_list <- Sys.glob(file.path(py$save_corrected_path, "*VAC.csv"))
 }
 
 lapply(file_list, flex_predict)
