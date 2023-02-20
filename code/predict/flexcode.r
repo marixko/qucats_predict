@@ -3,7 +3,7 @@ library(FlexCoDE)
 # install.packages("reticulate",  repos = "http://cran.us.r-project.org")
 
 library(reticulate)
-reticulate::source_python(file.path(getwd(),"code", "auxiliary", "paths.py"))
+reticulate::source_python(file.path(getwd(), "auxiliary", "paths.py"))
 
 correct_ext <- TRUE
 
