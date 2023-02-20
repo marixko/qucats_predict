@@ -132,6 +132,7 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
             if verbose:
                 print("Calculating FlexCoDE predictions...")
             flex_path = os.path.join(predict_path, "flexcode.r")
+            os.system(f"""export MKL_SERVICE_FORCE_INTEL=1""")
             os.system(f"""Rscript {flex_path}""")
     except Exception as e:
         print(e)
