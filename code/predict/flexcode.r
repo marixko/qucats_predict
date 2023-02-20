@@ -1,4 +1,5 @@
 library(FlexCoDE)
+library(pbapply)
 # remotes::install_github("rstudio/reticulate")
 # install.packages("reticulate",  repos = "http://cran.us.r-project.org")
 
@@ -76,4 +77,4 @@ if (correct_ext == TRUE) {
   file_list <- Sys.glob(file.path(py$save_corrected_path, "*VAC.csv"))
 }
 
-lapply(file_list, flex_predict)
+pblapply(file_list, flex_predict)
