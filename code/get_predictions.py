@@ -1,4 +1,5 @@
 import os
+import sys
 os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import glob
@@ -18,6 +19,23 @@ from auxiliary.columns import create_colors
 logging.basicConfig(filename=os.path.join(logs_path,'get_predictions.log'), format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.DEBUG, filemode='a')
 
+
+def parse_args():
+    rf = False
+    bmdn = False
+    flex = False
+    replace = False
+
+    for arg in sys.argv:
+        if arg == "--rf":
+            rf = True
+        elif arg == "--bmdn":
+            bmdn = True
+        elif arg == "--flex":
+            flex = True
+        elif arg == "--replace":
+            replace = True
+    return rf , bmdn, flex, replace  
 
 def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext_model = True, replace=False, verbose=True):
     start_time = timer()
@@ -144,11 +162,8 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
     
 if __name__ == "__main__":
     logging.info("get_predictions.py was called.")
-    replace = False
     correct_ext_model = True
-    bmdn= True
-    rf =  False
-    flex = False
+    rf , bmdn,  flex, replace = parse_args()
     
     list_files = glob.glob(os.path.join(save_corrected_path, "*ext.csv"))
     get_predictions(list_files, bmdn=bmdn, rf=rf, flex=flex, correct_ext_model = correct_ext_model, replace=replace)
