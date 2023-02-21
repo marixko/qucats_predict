@@ -22,8 +22,6 @@ fit3 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_3.rds"))
 fit4 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_4.rds"))
 fits <- list(fit0,fit1,fit2,fit3,fit4)
 
-rm(fit0, fit1, fit2, fit3, fit4) #cleaning memory
-
 if (correct_ext == TRUE) {
   file_list <- Sys.glob(file.path(py$save_corrected_path,"*ext.csv"))
 } else {
