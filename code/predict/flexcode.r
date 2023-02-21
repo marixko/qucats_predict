@@ -87,8 +87,7 @@ if (save==TRUE) {
   write.csv(cbind(info,z_flex_peak,pred), save_filepath ,row.names = FALSE)
 } 
 
-cat(paste0(counter,"/", length(file_list), " were processed."))
-cat("\n")
+cat("Finished: ", filename)
 }
 
 mclapply(file_list, flex_predict, mc.cores=16L)
