@@ -1,10 +1,17 @@
 library(FlexCoDE)
-library(pbapply)
+library(parallel)
 # remotes::install_github("rstudio/reticulate")
 # install.packages("reticulate",  repos = "http://cran.us.r-project.org")
 
 library(reticulate)
 reticulate::source_python(file.path(getwd(), "auxiliary", "paths.py"))
+
+args <- commandArgs(trailingOnly = TRUE)
+for (arg in args){
+  if(arg=="--replace"){
+    replace <- True
+  }
+}
 
 correct_ext <- TRUE
 
@@ -14,6 +21,12 @@ fit2 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_2.rds"))
 fit3 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_3.rds"))
 fit4 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_4.rds"))
 fits <- list(fit0,fit1,fit2,fit3,fit4)
+
+if (correct_ext == TRUE) {
+  file_list <- Sys.glob(file.path(py$save_corrected_path,"*ext.csv"))
+} else {
+  file_list <- Sys.glob(file.path(py$save_corrected_path, "*VAC.csv"))
+}
 
 ########
 
@@ -25,16 +38,20 @@ get_filename <- function(path) {
 
 ########
 
+counter <- 1
+
 flex_predict <- function(path_to_file, B = 200, correct_ext=TRUE, save=TRUE, replace=FALSE, verbose=TRUE){
   # B: number of grid points where the density will be evaluated
-if(file.exists(path_to_file) & replace==FALSE){
+
+filename <- get_filename(path_to_file)
+save_filepath <- file.path(py$results_path, paste0(filename, "_flex.csv"))
+if(file.exists(save_filepath) & replace==FALSE){
   return
 }
 
-filename <- get_filename(path_to_file)
-
 if(verbose==TRUE){
 cat("Running: ", filename)
+cat("\n")
 }
 # Dataset with photometric information.
 # Needs to contain the same photometric
@@ -65,16 +82,12 @@ colnames(pred) <- paste0("z_flex_pdf_",1:B)
 grid <- predict(fits[[1]],data_cov[1,,drop=FALSE],B=B)$z
 z_flex_peak <- grid[apply(pred,1,which.max)]
 if (save==TRUE) {
-  write.csv(cbind(info,z_flex_peak,pred),file.path(py$results_path, paste0(filename, "_flex.csv")),row.names = FALSE)
+  write.csv(cbind(info,z_flex_peak,pred), save_filepath ,row.names = FALSE)
 } 
+
+counter <<- counter + 1
+cat(paste0(counter,"/", length(file_list), " were processed."))
+cat("\n")
 }
 
-#######
-
-if (correct_ext == TRUE) {
-  file_list <- Sys.glob(file.path(py$save_corrected_path,"*ext.csv"))
-} else {
-  file_list <- Sys.glob(file.path(py$save_corrected_path, "*VAC.csv"))
-}
-
-pblapply(file_list, flex_predict)
+mclapply(file_list, flex_predict)
