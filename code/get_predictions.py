@@ -43,7 +43,7 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
 
     if verbose:
         print("Starting predictions for %s files" % len(list_files) )
-        print("Warning: if the result files already exists, they will be replaced by default for now! ")
+        print("Warning: if the result files already exists, they will be replaced by default for now (bmdn and rf)! ")
         
     model = {}
     aper = "PStotal"
@@ -133,7 +133,11 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
                 print("Calculating FlexCoDE predictions...")
             flex_path = os.path.join(predict_path, "flexcode.r")
             os.system(f"""export MKL_SERVICE_FORCE_INTEL=1""")
-            os.system(f"""Rscript {flex_path}""")
+            cmd_r = f"""Rscript {flex_path}"""
+            if replace:
+                cmd_r = f"""Rscript {flex_path} --replace"""
+            os.system(cmd_r)
+            
     except Exception as e:
         print(e)
         logging.error(e)
