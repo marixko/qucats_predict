@@ -90,4 +90,4 @@ cat(paste0(counter,"/", length(file_list), " were processed."))
 cat("\n")
 }
 
-mclapply(file_list, flex_predict)
+mclapply(file_list, flex_predict, mc.cores=16L)
