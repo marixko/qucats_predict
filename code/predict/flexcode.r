@@ -22,6 +22,8 @@ fit3 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_3.rds"))
 fit4 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_4.rds"))
 fits <- list(fit0,fit1,fit2,fit3,fit4)
 
+rm(fit0, fit1, fit2, fit3, fit4) #cleaning memory
+
 if (correct_ext == TRUE) {
   file_list <- Sys.glob(file.path(py$save_corrected_path,"*ext.csv"))
 } else {
@@ -64,6 +66,8 @@ data_cov <- data[,colnames(fit0$xTrain)]
 # ID information
 info <- data[,c("ID","RA","DEC")]
 
+rm(data) #clean memory
+
 # Remove missing data
 # which_remove <- !complete.cases(data_cov)
 # data_cov <- data_cov[!which_remove,]
@@ -85,7 +89,6 @@ if (save==TRUE) {
   write.csv(cbind(info,z_flex_peak,pred), save_filepath ,row.names = FALSE)
 } 
 
-counter <<- counter + 1
 cat(paste0(counter,"/", length(file_list), " were processed."))
 cat("\n")
 }
