@@ -88,6 +88,7 @@ if (save==TRUE) {
 } 
 
 cat("Finished: ", filename)
+cat("\n")
 }
 
-mclapply(file_list, flex_predict, mc.cores=5L)
+mclapply(file_list, flex_predict, mc.cores=4L)
