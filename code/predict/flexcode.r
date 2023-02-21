@@ -46,7 +46,7 @@ flex_predict <- function(path_to_file, B = 200, correct_ext=TRUE, save=TRUE, rep
 filename <- get_filename(path_to_file)
 save_filepath <- file.path(py$results_path, paste0(filename, "_flex.csv"))
 if(file.exists(save_filepath) & replace==FALSE){
-  return
+  return()
 }
 
 if(verbose==TRUE){
