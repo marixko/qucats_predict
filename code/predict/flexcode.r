@@ -90,4 +90,4 @@ if (save==TRUE) {
 cat("Finished: ", filename)
 }
 
-mclapply(file_list, flex_predict, mc.cores=16L)
+mclapply(file_list, flex_predict, mc.cores=5L)
