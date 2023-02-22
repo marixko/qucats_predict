@@ -36,7 +36,7 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
         if verbose:
             print(filename)
 
-        if os.path.exists(os.path.join(results_path, filename+".csv")):
+        if os.path.exists(os.path.join(results_path, filename)):
             if verbose:
                 print("Master catalogue already exists for this field.")
             if replace==False:
@@ -47,22 +47,22 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
                     print("Replacing file...")
                 logging.info("Master catalogue already exists for this field. It is being replaced.")
 
-        if os.path.exists(os.path.join(results_path, filename+"_bmdn.csv"))==False:
+        if os.path.exists(os.path.join(results_path, filename.split('.')[0]+"_bmdn.csv"))==False:
             if verbose:
                 print("BMDN predictions file is not in folder. Failed to create a catalog for this field.")
             logging.error("BMDN predictions file is not in folder. FAILED to create a catalog for this field.")
             continue
 
-        if os.path.exists(os.path.join(results_path, filename+"_flex.csv"))==False:
+        if os.path.exists(os.path.join(results_path, filename.split('.')[0]+"_flex.csv"))==False:
             if verbose:
                 print("FlexCoDE predictions file is not in folder. Failed to create a catalog for this field. ")
             logging.error("FlexCoDE predictions file is not in folder. FAILED to create a catalog for this field.")
             continue
 
         try:
-            bmdn = pd.read_table(os.path.join(results_path, filename+"_bmdn.csv"), sep=",")
-            flex = pd.read_table(os.path.join(results_path, filename+"_flex.csv"), sep=",")
-            rf =  pd.read_table(os.path.join(results_path, filename+"_rf.csv"), sep=",")
+            bmdn = pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_bmdn.csv"), sep=",")
+            flex = pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_flex.csv"), sep=",")
+            rf =  pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_rf.csv"), sep=",")
 
             table = pd.concat([rf, bmdn["z_bmdn_peak"], flex["z_flex_peak"]], axis=1)
             table["z_mean"] = table[["z_rf", "z_bmdn_peak", "z_flex_peak"]].mean(axis=1, numeric_only=True)
@@ -70,13 +70,13 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
 
             table = pd.concat([table, bmdn.iloc[:,4:], flex.iloc[:,4:]], axis=1)
             
-            table.to_csv(os.path.join(results_path, filename+".csv"), index=False)
+            table.to_csv(os.path.join(results_path, filename), index=False)
         except:
             logging.error("FAILED to save final catalog for this field.")
             continue
 
         if remove:
-            os.system(f"""rm {os.path.join(results_path, filename+"_*")}""")
+            os.system(f"""rm {os.path.join(results_path, filename.split('.')[0]+"_*")}""")
             logging.info("Removed rf, bmdn and flex result files for this field.")
 
     end_time = timer()
