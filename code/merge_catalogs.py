@@ -1,4 +1,5 @@
 import os
+import sys
 import glob
 import logging
 import pandas as pd
@@ -8,6 +9,20 @@ from auxiliary.paths import results_path, logs_path
 
 logging.basicConfig(filename=os.path.join(logs_path,'merge_catalogs.log'), format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.DEBUG, filemode='a')
+
+def parse_args():
+    verbose = False
+    replace = False
+    remove = False
+
+    for arg in sys.argv:
+        if arg == "--verbose":
+            verbose = True
+        elif arg == "--replace":
+            replace = True
+        elif arg == "--remove":
+            remove = True
+    return verbose, replace, remove
 
 def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
     start_time = timer()
@@ -72,5 +87,6 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
 
 if __name__=="__main__":
     logging.info("merge_catalogs.py was called.")
+    verbose, replace, remove = parse_args()
     list_files = glob.glob(os.path.join(results_path, "*ext_rf.csv"))
-    merge_catalogs(list_files, verbose=True, replace=True, remove=True)
+    merge_catalogs(list_files, verbose=verbose, replace=replace, remove=remove)
