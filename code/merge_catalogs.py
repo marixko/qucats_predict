@@ -31,7 +31,7 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
 
     for file in tqdm(list_files):
         filename = file.split(os.path.sep)[-1].split("_")[0]
-        filename = filename + "_QSO_VAC_ext.csv"
+        filename = filename + "_QSOz_VAC_ext.csv"
         logging.info("Starting for FIELD: %s" % filename)
         if verbose:
             print(filename)
