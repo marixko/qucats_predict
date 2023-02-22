@@ -30,7 +30,7 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
     logging.info("Function merge_catalogs was called. Loop has %s fields" % len(list_files))
 
     for file in tqdm(list_files):
-        filename = file.split(os.path.sep)[-1][0]
+        filename = file.split(os.path.sep)[-1]
         filename = filename + "_QSO_VAC_ext.csv"
         logging.info("Starting for FIELD: %s" % filename)
         if verbose:
