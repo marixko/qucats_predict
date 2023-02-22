@@ -38,8 +38,6 @@ get_filename <- function(path) {
 
 ########
 
-counter <- 1
-
 flex_predict <- function(path_to_file, B = 200, correct_ext=TRUE, save=TRUE, replace=FALSE, verbose=TRUE){
   # B: number of grid points where the density will be evaluated
 
@@ -64,7 +62,8 @@ data_cov <- data[,colnames(fit0$xTrain)]
 # ID information
 info <- data[,c("ID","RA","DEC")]
 
-rm(data) #clean memory
+rm(data) 
+gc() #clean memory
 
 # Remove missing data
 # which_remove <- !complete.cases(data_cov)
@@ -76,6 +75,7 @@ pred <- array(NA,dim=c(length(fits),nrow(data_cov),B))
 for(ii in seq_along(fits))
 {
   pred[ii,,] <- predict(fits[[ii]],data_cov,B=B)$CDE
+  gc()
 }
 pred <- apply(pred, c(2,3), function(x) mean(x))
 colnames(pred) <- paste0("z_flex_pdf_",1:B)
@@ -89,6 +89,7 @@ if (save==TRUE) {
 
 cat("Finished: ", filename)
 cat("\n")
+gc()
 }
 
 mclapply(file_list, flex_predict, mc.cores=4L)
