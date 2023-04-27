@@ -1,3 +1,12 @@
+24/04/23
+RF models were updated!
+- Bug fixed: cross-validation after application of extinction correction were being done in a different sample size than original. After fixing it by correcting extinction after the preprocess step, grid search values were changed (max depth is now 20)
+- We uploaded the new .sav files into the RF folder
+- Next steps are: re-run RF and merge catalogs again
+
+Known issues up to this date:
+- 6 fields fields failed to crossmatch; 12 failed to preprocess
+
 17/02/23
 Flow should be:
 

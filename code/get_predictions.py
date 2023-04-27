@@ -108,7 +108,7 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
                     Result_DF = FinalPredict(model["bmdn"], chunk_bmdn, PredictSample_Features)
 
                     #Saving results DataFrame
-                    Result_DF[HeaderToSave].to_csv(os.path.join(results_path, save_filename+"_bmdn.csv"), mode='a', index=False)
+                    Result_DF[HeaderToSave].to_csv(os.path.join(results_path, save_filename+"_bmdn.csv"), index=False)
             except Exception as e:
                 print(e)
                 logging.error(e)
@@ -121,7 +121,7 @@ def get_predictions(list_files, bmdn = True, rf = True, flex = True, correct_ext
                     logging.info("Starting RF prediction")
                     z = model["rf"].predict(table[features])
                     table["z_rf"] = z
-                    table[["ID",  "RA",  "DEC", "z_rf"]].to_csv(os.path.join(results_path, save_filename+"_rf.csv"), mode='a', index=False)
+                    table[["ID",  "RA",  "DEC", "z_rf"]].to_csv(os.path.join(results_path, save_filename+"_rf.csv"), index=False)
             except Exception as e:
                 print(e)
                 logging.error(e)
@@ -172,3 +172,4 @@ if __name__ == "__main__":
     
     list_files = glob.glob(os.path.join(save_corrected_path, "*ext.csv"))
     get_predictions(list_files, bmdn=bmdn, rf=rf, flex=flex, correct_ext_model = correct_ext_model, replace=replace)
+
