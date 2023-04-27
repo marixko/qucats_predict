@@ -1,3 +1,10 @@
+26/04/23
+- Fixed: --replace for get_predictions.py wasn't working properly because of mode="a" 
+
+Known issues: 
+- Fields that failed to crossmatch has to do with the lack of coverage with GALEX. We can change the order of crossmatch ( first unWISE then GALEX and set all GALEX filters as NaN) or we accept that these fields will not go into the VAC. 
+
+ 
 24/04/23
 RF models were updated!
 - Bug fixed: cross-validation after application of extinction correction were being done in a different sample size than original. After fixing it by correcting extinction after the preprocess step, grid search values were changed (max depth is now 20)
