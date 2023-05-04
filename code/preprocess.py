@@ -1,4 +1,5 @@
 import os
+import sys
 import glob
 import logging
 import numpy as np
@@ -6,7 +7,7 @@ import pandas as pd
 import warnings
 from tqdm import tqdm
 from astropy.table import Table
-from auxiliary.paths import input_path, logs_path, save_corrected_path, save_xmatch_path
+from auxiliary.paths import logs_path, save_corrected_path, save_xmatch_path
 from auxiliary.columns import create_colors, calculate_colors, wise, splus, galex, error_splus
 from auxiliary.correct_extinction import correction
 from astropy.utils.exceptions import AstropyWarning
@@ -15,6 +16,23 @@ warnings.simplefilter('ignore', category=AstropyWarning)
 
 logging.basicConfig(filename=os.path.join(logs_path,'errors_field.log'), format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.DEBUG, filemode='a')
+
+def parse_args():
+    verbose = False
+    replace = False
+
+    for arg in sys.argv:
+        if arg == "--verbose":
+            verbose = True
+        elif arg == "--replace":
+            replace = True
+    return verbose, replace
+
+def handle_exception(e, file):
+    print(e)
+    logging.error(e)
+    logging.error("get_data FAILED for field %s." % file.split(os.path.sep)[-1])
+    return
 
 def process_data(filename, correct_ext=True, save=False, replace=False):
     print(filename.split(os.path.sep)[-1])
@@ -37,8 +55,7 @@ def process_data(filename, correct_ext=True, save=False, replace=False):
         table = table.to_pandas()
         table["ID"] = table["ID"].str.decode('utf-8') 
     except Exception as e:
-        print(e)
-        logging.error(e)
+        handle_exception(e,filename)
         return
 
     table['W1_MAG'] = 22.5 - 2.5*np.log10(table['FW1']) # + 2.699
@@ -60,8 +77,7 @@ def process_data(filename, correct_ext=True, save=False, replace=False):
         if correct_ext:
             table = correction(table)
     except Exception as e:
-        print(e)
-        logging.error(e)
+        handle_exception(e,filename)
         return
 
     table = calculate_colors(table, broad=True, narrow=True, wise=True, galex = True, aper="PStotal")
@@ -79,18 +95,12 @@ def get_data(list_input, correct_ext = True, save=True, replace= False):
     logging.info("get_data was called for %s fields." % len(list_input))
     logging.info("Parameter correct_ext = %s" % correct_ext)
     for file in tqdm(list_input):
-        try:
-            process_data(file, correct_ext = correct_ext, save=save, replace=replace)
-        except:
-            logging.error("get_data FAILED for field %s." % file.split(os.path.sep)[-1])
-            continue
+        process_data(file, correct_ext = correct_ext, save=save, replace=replace)
     return
 
 
 if __name__ == "__main__":
     logging.info("preprocess.py was called.")
-    replace = False
-    correct_ext = True
+    verbose, replace = parse_args()
     list_input = glob.glob(os.path.join(save_xmatch_path, "STRIPE*138**.fits"))
-    print(list_input)
-    get_data(list_input, correct_ext = correct_ext, save = True, replace = replace)
+    get_data(list_input, correct_ext = True, save = True, replace = replace)
