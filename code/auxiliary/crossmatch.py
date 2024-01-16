@@ -1,6 +1,7 @@
 import os
 import logging
 from auxiliary.paths import logs_path,  aux_path, save_xmatch_path
+import subprocess 
 
 logging.basicConfig(filename=os.path.join(logs_path,'errors_field.log'), format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.DEBUG, filemode='a')

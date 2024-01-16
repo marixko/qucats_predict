@@ -13,11 +13,11 @@ def get_crossmatch(list_raw, replace=False, diff = True):
     
     if diff:
         replace = False #Only crossmatch fields that have not been crossmatched yet.
-        list_match = glob.glob(os.path.join(save_xmatch_path, "*features.fits"))
+        list_match = glob.glob(os.path.join(save_xmatch_path, "*features.fits")) #List of fields that have been crossmatched.
         list_match = [os.path.basename(x) for x in list_match]
-        list_raw = [os.path.basename(x) for x in list_raw]
-        list_diff = list(set(list_raw) - set(list_match))
-        list_raw = [os.path.join(raw_path, x) for x in list_diff]
+        list_raw = [os.path.basename(x) for x in list_raw] #List of fields in the original folder (after calibration, before crossmatch).
+        list_diff = list(set(list_raw) - set(list_match)) #List of fields that have not been crossmatched yet.
+        list_raw = [os.path.join(raw_path, x) for x in list_diff] # Full path of fields that have not been crossmatched yet.
         
     
     for file in tqdm(list_raw):

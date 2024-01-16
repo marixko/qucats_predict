@@ -1,21 +1,22 @@
-from collections import OrderedDict 
 import itertools
+from collections import OrderedDict 
 
-# aper = "iso"
-specz = "Z"
+
+aper = 'PStotal'
+specz = 'Z'
 
 feat_broad = ['u', 'g', 'r', 'i', 'z']
-feat_narrow = ['J0378', 'J0395', 'J0410', 'J0430',
-         'J0515', 'J0660', 'J0861']
-wise = ["W1_MAG", "W2_MAG"]
+broad = [item+'_'+aper for item in feat_broad]
+feat_narrow = ['J0378', 'J0395', 'J0410', 'J0430', 'J0515', 'J0660', 'J0861']
+narrow = [item+'_'+aper for item in feat_narrow]
+splus = broad + narrow
+wise_flux = ['FW1', 'FW2']
+wise = ['W1', 'W2']
 galex = ['FUVmag', 'NUVmag']
 
-feat = feat_broad+feat_narrow
-splus = [item+"_"+"PStotal" for item in feat]
-error_splus = ["e_"+item for item in splus]
-error_wise = [item+"_ERR" for item in wise]
-error_galex = ["e_"+item for item in galex]
-
+error_splus = ['e_'+item for item in splus]
+error_wise = [item+'_ERR' for item in wise]
+error_galex = ['e_'+item for item in galex]
 
         
 def create_features(aper): 
