@@ -155,3 +155,24 @@ def calculate_ratio(data, broad, narrow, wise, galex):
         data[name].replace({1: 99}, inplace=True)
     
     return data
+
+
+def convert_f64_to_f32(df, exclude_columns=["RA", "DEC"]):
+    """
+    Convert all float64 columns to float32, excluding specified columns.
+
+    Parameters:
+    - df: pandas DataFrame to process.
+    - exclude_columns: list of column names to exclude from conversion.
+
+    Returns:
+    - DataFrame with float64 columns converted to float32, except excluded columns.
+    """
+    if exclude_columns is None:
+        exclude_columns = []
+
+    for column in df.select_dtypes(include=['float64']).columns:
+        if column not in exclude_columns:
+            df[column] = df[column].astype('float32')
+
+    return df

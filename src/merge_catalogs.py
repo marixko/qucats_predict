@@ -8,6 +8,7 @@ from timeit import default_timer as timer
 import pandas as pd
 from tqdm import tqdm
 
+from auxiliary.columns import convert_f64_to_f32
 from auxiliary.paths import results_path, logs_path
 
 
@@ -75,7 +76,7 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
 
             table = pd.concat([table, bmdn.iloc[:,4:], flex.iloc[:,4:]], axis=1)
             
-            table.to_csv(os.path.join(results_path, filename), index=False)
+            convert_f64_to_f32(table).to_csv(os.path.join(results_path, filename), index=False)
         except:
             logging.error("FAILED to save final catalog for this field.")
             continue

@@ -12,7 +12,7 @@ from tensorflow.keras.models import load_model
 import tensorflow_probability as tfp; tfd = tfp.distributions
 
 # from auxiliary.metrics import Odds, Q
-from auxiliary.columns import calculate_colors, aper, splus, broad, narrow, wise, galex, error_splus
+from auxiliary.columns import calculate_colors, aper, convert_f64_to_f32, splus, broad, narrow, wise, galex, error_splus
 
 
 warnings.filterwarnings('ignore')
@@ -209,7 +209,7 @@ def PredictForFileNoTry(files_list:list, folders:dict):
                 Result_DF = FinalPredict(PZ_Model, PredictSample, PredictSample_Features)
 
                 # Saving results DataFrame
-                Result_DF[HeaderToSave].to_csv(os.path.join(folders['output'], f'{file}.csv'),
+                convert_f64_to_f32(Result_DF[HeaderToSave]).to_csv(os.path.join(folders['output'], f'{file}.csv'),
                                                mode='a', index=False)
         
         else:
@@ -219,4 +219,4 @@ def PredictForFileNoTry(files_list:list, folders:dict):
             Result_DF = FinalPredict(PZ_Model, PredictSample, PredictSample_Features)
 
             # Saving results DataFrame
-            Result_DF[HeaderToSave].to_csv(os.path.join(folders['output'], f'{file}.csv'), mode='a', index=False)
+            convert_f64_to_f32(Result_DF[HeaderToSave]).to_csv(os.path.join(folders['output'], f'{file}.csv'), mode='a', index=False)

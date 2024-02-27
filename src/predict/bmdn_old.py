@@ -11,7 +11,7 @@ from scipy import integrate
 import tensorflow_probability as tfp; tfd = tfp.distributions
 from auxiliary.paths import data_path
 from auxiliary.metrics import Odds, Q
-from auxiliary.columns import splus, wise, galex, create_colors, calculate_colors
+from auxiliary.columns import convert_f64_to_f32, splus, wise, galex, create_colors, calculate_colors
 
 def PredictForFileNoTry(files_list:list, folders:dict, aper='PStotal'):
 
@@ -55,7 +55,7 @@ def PredictForFileNoTry(files_list:list, folders:dict, aper='PStotal'):
                 Result_DF = FinalPredict(PZ_Model, chunk, PredictSample_Features)
 
                 # Saving results DataFrame
-                Result_DF[HeaderToSave].to_csv(os.path.join(folders['output'], f'{file}.csv'),
+                convert_f64_to_f32(Result_DF[HeaderToSave]).to_csv(os.path.join(folders['output'], f'{file}.csv'),
                                                mode='a', index=False, header=Header)
                 Header = None
         
@@ -71,7 +71,7 @@ def PredictForFileNoTry(files_list:list, folders:dict, aper='PStotal'):
             Result_DF = FinalPredict(PZ_Model, chunk, PredictSample_Features)
 
             # Saving results DataFrame
-            Result_DF[HeaderToSave].to_csv(os.path.join(folders['output'], f'{file}.csv'), mode='a', index=False)
+            convert_f64_to_f32(Result_DF[HeaderToSave]).to_csv(os.path.join(folders['output'], f'{file}.csv'), mode='a', index=False)
 
 
 def Process_Final(Dataframe, aper:str):

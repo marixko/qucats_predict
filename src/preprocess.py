@@ -13,7 +13,7 @@ from astropy.utils.exceptions import AstropyWarning
 
 from auxiliary.correct_extinction import correction
 from auxiliary.paths import logs_path, save_corrected_path, save_xmatch_path
-from auxiliary.columns import create_colors, calculate_colors, aper, splus, wise, galex, error_splus
+from auxiliary.columns import convert_f64_to_f32, create_colors, calculate_colors, aper, splus, wise, galex, error_splus
 
 
 warnings.simplefilter('ignore', category=AstropyWarning)

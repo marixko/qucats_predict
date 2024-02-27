@@ -13,7 +13,7 @@ from pandas import read_table
 from joblib import load as job_load
 from tensorflow.keras.models import load_model
 
-from auxiliary.columns import create_colors
+from auxiliary.columns import convert_f64_to_f32, create_colors
 from predict.bmdn import preprocess_BMDN, FinalPredict
 from auxiliary.paths import results_path, model_path, predict_path, logs_path, save_corrected_path
 
@@ -118,7 +118,7 @@ def get_predictions(list_files, bmdn=True, rf=True, flex=True, replace=False, ve
                     chunk_bmdn = table.copy(deep=True)
                     sample, features = preprocess_BMDN(chunk_bmdn, bmdn_features, Scaler_1, Scaler_2)
                     Result_DF = FinalPredict(model["bmdn"], sample, features)
-                    Result_DF[bmdn_columns].to_csv(save_path_bmdn, index=False)
+                    convert_f64_to_f32(Result_DF[bmdn_columns]).to_csv(save_path_bmdn, index=False)
                         
             except Exception as e:
                 handle_error_file(e, file, verbose)
@@ -134,7 +134,8 @@ def get_predictions(list_files, bmdn=True, rf=True, flex=True, replace=False, ve
 
                     z = model["rf"].predict(table[rf_features])
                     table["z_rf"] = z
-                    table[["ID", "RA",  "DEC", "z_rf"]].to_csv(save_path_rf, index=False)
+                    convert_f64_to_f32(table[["ID", "RA",  "DEC", "z_rf"]]).to_csv(save_path_rf, index=False)
+                    
             except Exception as e:
                 handle_error_file(e, file, verbose)
                 pass
