@@ -1,0 +1,35 @@
+Model: "functional_1"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+input_1 (InputLayer)         [(None, 15)]              0         
+_________________________________________________________________
+dense_variational (DenseVari (None, 196)               9408      
+_________________________________________________________________
+batch_normalization (BatchNo (None, 196)               784       
+_________________________________________________________________
+dense_variational_1 (DenseVa (None, 196)               115836    
+_________________________________________________________________
+batch_normalization_1 (Batch (None, 196)               784       
+_________________________________________________________________
+dense_variational_2 (DenseVa (None, 196)               115836    
+_________________________________________________________________
+batch_normalization_2 (Batch (None, 196)               784       
+_________________________________________________________________
+dense (Dense)                (None, 21)                4137      
+_________________________________________________________________
+mixture_normal (MixtureNorma ((None, 1), (None, 1))    0         
+=================================================================
+Total params: 247,569
+Trainable params: 246,393
+Non-trainable params: 1,176
+_________________________________________________________________
+Output dir: /home/raquel/Documents/qucats_paper/results/bmdn/final_model_dr4_BNWG_linux_700e/
+epochs: 700, batch_size: 1024
+activation: leaky_re_lu, kl_weight: 1/33151
+Optimizer: {'name': 'Adam', 'clipnorm': 0.5, 'clipvalue': 0.5, 'learning_rate': 0.001, 'decay': 0.0, 'beta_1': 0.9, 'beta_2': 0.999, 'epsilon': 1e-07, 'amsgrad': False}
+Loss: negloglik
+Input file: STRIPE82_DR4_DR16Q1a_unWISE2a_GALEXDR672a.csv
+Total len: 33151
+Number of features: 15
+['u_PStotal-r_PStotal', 'g_PStotal-r_PStotal', 'r_PStotal-i_PStotal', 'r_PStotal-z_PStotal', 'J0378_PStotal-r_PStotal', 'J0395_PStotal-r_PStotal', 'J0410_PStotal-r_PStotal', 'J0430_PStotal-r_PStotal', 'J0515_PStotal-r_PStotal', 'r_PStotal-J0660_PStotal', 'r_PStotal-J0861_PStotal', 'r_PStotal-W1', 'r_PStotal-W2', 'FUVmag-r_PStotal', 'NUVmag-r_PStotal']

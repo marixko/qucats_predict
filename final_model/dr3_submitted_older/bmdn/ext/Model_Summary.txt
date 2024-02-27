@@ -32,4 +32,4 @@ Loss: negloglik
 Input file: iDR3n4_DR16Q_GALEX2-ren.csv
 Total len: 32687
 Number of features: 15
-['FUVmag-r_PStotal', 'NUVmag-r_PStotal', 'u_PStotal-r_PStotal', 'J0378_PStotal-r_PStotal', 'J0395_PStotal-r_PStotal', 'J0410_PStotal-r_PStotal', 'J0430_PStotal-r_PStotal', 'g_PStotal-r_PStotal', 'J0515_PStotal-r_PStotal', 'r_PStotal-J0660_PStotal', 'r_PStotal-i_PStotal', 'r_PStotal-J0861_PStotal', 'r_PStotal-z_PStotal', 'r_PStotal-W1_MAG', 'r_PStotal-W2_MAG']
+['FUVmag-r_PStotal', 'NUVmag-r_PStotal', 'u_PStotal-r_PStotal', 'J0378_PStotal-r_PStotal', 'J0395_PStotal-r_PStotal', 'J0410_PStotal-r_PStotal', 'J0430_PStotal-r_PStotal', 'g_PStotal-r_PStotal', 'J0515_PStotal-r_PStotal', 'r_PStotal-J0660_PStotal', 'r_PStotal-i_PStotal', 'r_PStotal-J0861_PStotal', 'r_PStotal-z_PStotal', 'r_PStotal-W1', 'r_PStotal-W2']
