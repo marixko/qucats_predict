@@ -2,14 +2,18 @@ import os
 import sys
 import glob
 import logging
+from datetime import timedelta
+from timeit import default_timer as timer
+
 import pandas as pd
 from tqdm import tqdm
-from timeit import default_timer as timer
-from datetime import timedelta
+
 from auxiliary.paths import results_path, logs_path
+
 
 logging.basicConfig(filename=os.path.join(logs_path,'merge_catalogs.log'), format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.DEBUG, filemode='a')
+
 
 def parse_args():
     verbose = False
@@ -25,13 +29,14 @@ def parse_args():
             remove = True
     return verbose, replace, remove
 
+
 def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
     start_time = timer()
     logging.info("Function merge_catalogs was called. Loop has %s fields" % len(list_files))
 
     for file in tqdm(list_files):
         filename = file.split(os.path.sep)[-1].split("_")[0]
-        filename = filename + "_QSOz_VAC_ext.csv"
+        filename = filename + "_QSOz_VAC.csv"
         logging.info("Starting for FIELD: %s" % filename)
         if verbose:
             print(filename)
@@ -47,22 +52,22 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
                     print("Replacing file...")
                 logging.info("Master catalogue already exists for this field. It is being replaced.")
 
-        if os.path.exists(os.path.join(results_path, filename.split('.')[0]+"_bmdn.csv"))==False:
+        if os.path.exists(os.path.join(results_path, filename.split('.')[0]+"_preprocessed_bmdn.csv"))==False:
             if verbose:
                 print("BMDN predictions file is not in folder. Failed to create a catalog for this field.")
             logging.error("BMDN predictions file is not in folder. FAILED to create a catalog for this field.")
             continue
 
-        if os.path.exists(os.path.join(results_path, filename.split('.')[0]+"_flex.csv"))==False:
+        if os.path.exists(os.path.join(results_path, filename.split('.')[0]+"_preprocessed_flex.csv"))==False:
             if verbose:
                 print("FlexCoDE predictions file is not in folder. Failed to create a catalog for this field. ")
             logging.error("FlexCoDE predictions file is not in folder. FAILED to create a catalog for this field.")
             continue
 
         try:
-            bmdn = pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_bmdn.csv"), sep=",")
-            flex = pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_flex.csv"), sep=",")
-            rf =  pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_rf.csv"), sep=",")
+            bmdn = pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_preprocessed_bmdn.csv"), sep=",")
+            flex = pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_preprocessed_flex.csv"), sep=",")
+            rf =  pd.read_table(os.path.join(results_path, filename.split('.')[0]+"_preprocessed_rf.csv"), sep=",")
 
             table = pd.concat([rf, bmdn["z_bmdn_peak"], flex["z_flex_peak"]], axis=1)
             table["z_mean"] = table[["z_rf", "z_bmdn_peak", "z_flex_peak"]].mean(axis=1, numeric_only=True)
@@ -86,8 +91,9 @@ def merge_catalogs(list_files, verbose=True, replace=False, remove=True):
     
     return
 
+
 if __name__=="__main__":
     logging.info("merge_catalogs.py was called.")
     verbose, replace, remove = parse_args()
-    list_files = glob.glob(os.path.join(results_path, "*ext_rf.csv"))
+    list_files = glob.glob(os.path.join(results_path, "*_rf.csv"))
     merge_catalogs(list_files, verbose=verbose, replace=replace, remove=remove)

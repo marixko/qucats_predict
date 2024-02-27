@@ -1,10 +1,13 @@
 import os
-import pandas as pd
+
 import sfdmap
 import extinction
-from auxiliary.paths import data_path
 import numpy as np
+import pandas as pd
+
+from auxiliary.paths import data_path
 from auxiliary.columns import splus, wise, galex
+
 
 def correction(data, feat=[]):
     chunk = data.copy(deep=True)
@@ -44,6 +47,3 @@ def correction(data, feat=[]):
     chunk[feat] = chunk[feat].mask(mask_99, other=99)
     chunk.index = data.index
     return chunk
-
-
-

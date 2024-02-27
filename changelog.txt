@@ -1,3 +1,8 @@
+15/01/24
+- Updated preprocess.py with the new changes:
+    - Major: added flag_WISE and flag_GALEX
+
+
 14/01/24
 - Fixed: order of lambdas in correct_extiction.py
 

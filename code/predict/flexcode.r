@@ -7,26 +7,22 @@ library(reticulate)
 reticulate::source_python(file.path(getwd(), "auxiliary", "paths.py"))
 
 args <- commandArgs(trailingOnly = TRUE)
+
 for (arg in args){
   if(arg=="--replace"){
-    replace <- True
+    replace <- TRUE
   }
 }
 
-correct_ext <- TRUE
-
-fit0 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2.rds"))
-fit1 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_1.rds"))
-fit2 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_2.rds"))
-fit3 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_3.rds"))
-fit4 <- readRDS(file.path(py$model_path, "flexcode","ext_fit2_4.rds"))
+fit0 <- readRDS(file.path(py$model_path, "flexcode","broad+GALEX+WISE+narrow_0.rds"))
+fit1 <- readRDS(file.path(py$model_path, "flexcode","broad+GALEX+WISE+narrow_1.rds"))
+fit2 <- readRDS(file.path(py$model_path, "flexcode","broad+GALEX+WISE+narrow_2.rds"))
+fit3 <- readRDS(file.path(py$model_path, "flexcode","broad+GALEX+WISE+narrow_3.rds"))
+fit4 <- readRDS(file.path(py$model_path, "flexcode","broad+GALEX+WISE+narrow_4.rds"))
 fits <- list(fit0,fit1,fit2,fit3,fit4)
 
-if (correct_ext == TRUE) {
-  file_list <- Sys.glob(file.path(py$save_corrected_path,"*ext.csv"))
-} else {
-  file_list <- Sys.glob(file.path(py$save_corrected_path, "*VAC.csv"))
-}
+
+file_list <- Sys.glob(file.path(py$save_corrected_path, "*preprocessed.csv"))
 
 ########
 

@@ -1,10 +1,13 @@
 import os
 import logging
+import subprocess
+
 from auxiliary.paths import logs_path,  aux_path, save_xmatch_path
-import subprocess 
+
 
 logging.basicConfig(filename=os.path.join(logs_path,'errors_field.log'), format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p',
                     level=logging.DEBUG, filemode='a')
+
 
 def match_stilts(filename, replace=True, verbose=True):
     galex_failed = False

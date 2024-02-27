@@ -1,0 +1,19 @@
+name: bmdn
+channels:
+  - defaults
+dependencies:
+  - python=3.7
+  - numpy=1.18.5
+  - scikit-learn=1.0.2
+  - pandas=1.2.4
+  - matplotlib
+  - scipy=1.4.1
+  - astropy
+  - extinction
+  - tqdm
+  - ipython
+  - ipykernel
+  - pip
+  - pip:
+    - tensorflow==2.3.0
+    - tensorflow-probability==0.11.0

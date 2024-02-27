@@ -1,5 +1,6 @@
 import os
 
+
 def check_dir(path:str):
     """check_dir will check if directories already exists. If not, it will create the directory (only necessary substructures)
 
@@ -12,7 +13,8 @@ def check_dir(path:str):
         os.makedirs(path)
     return
 
-maua_server=False
+
+maua_server = False
 mycwd = os.path.abspath(os.getcwd())
 if mycwd.split(os.sep)[-1] == "qucats_predict": #folder name in Maua server is qso_z and not qucats_predict
     parent_cwd = mycwd
@@ -54,5 +56,3 @@ else:
     check_dir(results_path)
     save_xmatch_path = input_path
     save_corrected_path = input_path
-
-
