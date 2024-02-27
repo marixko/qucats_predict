@@ -76,9 +76,9 @@ Parsed arguments are:
 - --remove: to remove the output file for each method after merging them in a single file. [only for `merge_catalogs.py`]
 
 # Important Notes
-- The pipeline is designed to run in S-PLUS's server and for S-PLUS DR4. For any other data release, the trained models would likely need to retrained.
+- This codes are intended to work only for S-PLUS DR4 data. For any other data release, the trained models would likely need to retrained.
 - Large files (such as some trained models) are not being pushed to the repository. Please contact the authors if you need access to these files.
-- This implementation are intend to work in S-PLUS' server only and its current pattern of data release directories. If you want to use it locally, you will need to adapt the code (e.g. paths) to your own data structure.
+- This pipeline is designed to work in S-PLUS' server only and its current pattern of data release directories. If you want to use it locally, you will need to adapt the code (e.g. paths) to your own data structure.
 
 # Codes were written by
 - Lilianne Nakazono
